@@ -1,6 +1,7 @@
 import csv
+import os
 
-budget_data = "budget_data.csv"
+budget_data = "D:/Data analytics bootcamp/week3/module_3_challenge/python_challenge/PayBank/resources/budget_data.csv"
 
 # Initialize variables
 total_months = 0
@@ -62,3 +63,16 @@ print(f"Total: ${total_profit_losses}")
 print(f"Average Change: ${average_change}")
 print(f"Greatest Increase in Profits: {greatest_increase_month} (${greatest_increase})")
 print(f"Greatest Decrease in Profits: {greatest_decrease_month} (${greatest_decrease})")
+
+# Write financial analysis to a text file and save in analysis folder
+output_path = os.path.join("D:/Data analytics bootcamp/week3/module_3_challenge/python_challenge/PayBank/analysis", "financial_analysis.txt")
+with open(output_path, "w") as txt_file:
+    txt_file.write("Financial Analysis\n")
+    txt_file.write("-" * 30 + "\n")
+    txt_file.write(f"Total Months: {total_months}\n")
+    txt_file.write(f"Total: ${total_profit_losses}\n")
+    txt_file.write(f"Average Change: ${average_change}\n")
+    txt_file.write(f"Greatest Increase in Profits: {greatest_increase_month} (${greatest_increase})\n")
+    txt_file.write(f"Greatest Decrease in Profits: {greatest_decrease_month} (${greatest_decrease})\n")
+
+print(f"Financial analysis has been written to {output_path}.")
