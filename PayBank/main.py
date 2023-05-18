@@ -55,7 +55,7 @@ with open(budget_data) as csv_file:
 # Calculate the average change in Profit/Losses
 average_change = round(sum(changes_profit_losses) / len(changes_profit_losses), 2)
 
-# Print output
+# Print financial analysis
 print("Financial Analysis")
 print("-" * 30)
 print(f"Total Months: {total_months}")
