@@ -1,64 +1,58 @@
 import csv
 
-budget_data = "budget_data.csv"
+# path to the csv file
+file_path = "D:/Data analytics bootcamp/week3/module_3_challenge/python_challenge/PayPoll/resources/election_data.csv"
 
-# Initialize variables
-total_months = 0
-total_profit_losses = 0
-average_change = 0
+# initialize variables
+count_votes = 0
+vote_counts = {}
+candidates = []
 
-# Initialize variables for the changes in profit/losses
-previous_profit_losses = 0
-current_profit_losses = 0
-profit_losses_change = 0
-changes_profit_losses = []
-
-# Initialize variables for greatest increase and decrease in profits, and their respective dates
-greatest_increase = 0
-greatest_decrease = 0
-greatest_increase_month = ""
-greatest_decrease_month = ""
-
-# Read CSV file
-with open(budget_data) as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=",")
-    next(csv_reader) # Skip header row
-
-    # Loop through each row in the CSV file
-    for row in csv_reader:
-        # Increment total months
-        total_months += 1
+# read the csv file
+with open(file_path, newline='') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=',')
+    next(csvreader) # skip header row
+    
+    # loop through rows
+    for row in csvreader:
+        # vote count
+        count_votes += 1
         
-        # Calculate the net total amount of Profit/Losses
-        total_profit_losses += int(row[1])
-        
-        # Calculate the changes in Profit/Losses
-        current_profit_losses = int(row[1])
-        if previous_profit_losses != 0:
-            profit_losses_change = current_profit_losses - previous_profit_losses
-            changes_profit_losses.append(profit_losses_change)
-        
-        # Calculate the greatest increase in profits and the respective month
-        if profit_losses_change > greatest_increase:
-            greatest_increase = profit_losses_change
-            greatest_increase_month = row[0]
-        
-        # Calculate the greatest decrease in profits and the respective month
-        if profit_losses_change < greatest_decrease:
-            greatest_decrease = profit_losses_change
-            greatest_decrease_month = row[0]
-        
-        # Set previous_profit_losses for the next loop iteration
-        previous_profit_losses = current_profit_losses
+        # candidate vote count
+        if row[2] in vote_counts:
+            vote_counts[row[2]] += 1
+        else:
+            vote_counts[row[2]] = 1
+            
+        # list of candidates
+        if row[2] not in candidates:
+            candidates.append(row[2])
+            
+# calculate percentage of votes and total votes per candidate
+percentage_votes = {}
+total_votes = 0
+for candidate, votes in vote_counts.items():
+    percentage_votes[candidate] = '{0:.2f}%'.format((votes/count_votes)*100)
+    total_votes += votes
 
-# Calculate the average change in Profit/Losses
-average_change = round(sum(changes_profit_losses) / len(changes_profit_losses), 2)
+# determine winner based on popular vote
+winner = max(vote_counts, key=vote_counts.get)
 
-# Print output
-print("Financial Analysis")
-print("-" * 30)
-print(f"Total Months: {total_months}")
-print(f"Total: ${total_profit_losses}")
-print(f"Average Change: ${average_change}")
-print(f"Greatest Increase in Profits: {greatest_increase_month} (${greatest_increase})")
-print(f"Greatest Decrease in Profits: {greatest_decrease_month} (${greatest_decrease})")
+
+# print results
+output = "Election Results\n"
+output += "-------------------------\n"
+output += "Total Votes: " + str(count_votes) + "\n"
+output += "-------------------------\n"
+for candidate in candidates:
+    output += candidate + ": " + str(percentage_votes[candidate]) + " (" + str(vote_counts[candidate]) + ")\n"
+output += "-------------------------\n"
+output += "Winner: " + winner + "\n"
+output += "-------------------------\n"
+
+# print results to terminal
+print(output)
+
+# write results to txt file
+with open("D:/Data analytics bootcamp/week3/module_3_challenge/python_challenge/PayPoll/analysis/election_results.txt", "w") as txt_file:
+    txt_file.write(output)
