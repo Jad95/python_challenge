@@ -56,3 +56,5 @@ print(output)
 # write results to txt file
 with open("D:/Data analytics bootcamp/week3/module_3_challenge/python_challenge/PayPoll/analysis/election_results.txt", "w") as txt_file:
     txt_file.write(output)
+
+    print(f"Election results has been written to {txt_file}.")
